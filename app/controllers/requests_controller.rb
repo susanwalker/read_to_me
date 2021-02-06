@@ -1,7 +1,6 @@
+# Controller for requests endpoint
 class RequestsController < ApplicationController
-  def new
-  end
+  def new; end
 
-  def create
-  end 
+  def create; end
 end
