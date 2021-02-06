@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2021_02_06_162544) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "requests", force: :cascade do |t|
     t.binary "input_image"
     t.text "intermediate_text"
