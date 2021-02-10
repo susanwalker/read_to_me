@@ -1,6 +1,12 @@
-<div class="ui labeled input">
-  <div class="ui label">
-    Upload Image
-  </div>
-  <input type="file" placeholder="/path/to/image">
+<div class="ui">
+  <%= form_with model: @request do |form| %>
+    <div class="ui labeled input">
+      <div class="ui label">
+        Upload Image
+      </div>
+      <%= form.file_field :input_image, direct_upload: true %>
+    </div>
+
+    <%= form.submit 'Submit', class: 'ui button' %>
+  <% end %>
 </div>

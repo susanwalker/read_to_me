@@ -3,5 +3,7 @@ Rails.application.routes.draw do
 
   get '/', to: 'requests#new'
 
-  get '/requests/create', to: 'requests#create'
+  post '/requests', to: 'requests#create'
+
+  get '/requests/:id', to: 'requests#show'
 end
