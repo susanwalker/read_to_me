@@ -1,1 +1,11 @@
+<%= image_tag url_for(@request.input_image) %>
+
+<br />
+<br />
+
 <%= @request.intermediate_text %>
+
+<br />
+<br />
+
+<%= audio_tag url_for(@request.output_audio), autoplay: true, controls: true %>
