@@ -60,5 +60,25 @@ RSpec.describe Request, type: :model do
         expect(request.output_audio.attached?).to be_truthy
       end
     end
+
+    context 'when the image is not readable' do
+      let!(:image) { image_for_upload('nonsense.png', 'png') }
+
+      it 'updates intermediate_text field to an empty text' do
+        expect(request.intermediate_text).to be_nil
+        request.save
+        trimmed_expected_text = ' '.delete("\n").delete("\f")
+        trimmed_intermediate_text =
+          request.intermediate_text.delete("\n").delete("\f")
+
+        expect(trimmed_intermediate_text).to eq(trimmed_expected_text)
+      end
+
+      it 'still sets output_audio to non-nil value' do
+        expect(request.output_audio.attached?).to be_falsey
+        request.save
+        expect(request.output_audio.attached?).to be_truthy
+      end
+    end
   end
 end
