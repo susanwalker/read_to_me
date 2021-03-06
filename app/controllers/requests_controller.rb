@@ -5,6 +5,8 @@ class RequestsController < ApplicationController
   end
 
   def create
+    # params here look like this:
+    # { request: { input_image: <some-image-uploaded> } }
     @request = Request.new(params.permit(request: :input_image)[:request])
     # TODO: add image to text and text to speech
 

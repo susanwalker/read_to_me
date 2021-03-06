@@ -29,13 +29,56 @@ RSpec.describe Request, type: :model do
     end
   end
 
-  # https://channaly.medium.com/how-to-work-with-active-storage-attachment-in-rspec-23bcc49712d6
-  def image_for_upload(filename, type)
-    file = Rails.root.join('spec', 'support', filename)
-    ActiveStorage::Blob.create_after_upload!(
-      io: File.open(file, 'rb'),
-      filename: filename,
-      content_type: "image/#{type}"
-    ).signed_id
+  describe 'after_create' do
+    let!(:request) { Request.new(input_image: image) }
+
+    context 'when the image is readable' do
+      let!(:image) { image_for_upload('vegan_quote.png', 'png') }
+      let!(:trimmed_expected_text) do
+        expected_text = <<~HEREDOC
+          VEGAN.
+          BECAUSE IT’S A POWERFUL STEP
+          WE CAN TAKE IN MAKING
+          THIS WORLD A MORE
+          PEACEFUL PLACE.
+        HEREDOC
+        expected_text.delete("\n").delete("\f")
+      end
+
+      it 'updates intermediate_text field to the expected text' do
+        expect(request.intermediate_text).to be_nil
+        request.save
+        trimmed_intermediate_text =
+          request.intermediate_text.delete("\n").delete("\f")
+
+        expect(trimmed_intermediate_text).to eq(trimmed_expected_text)
+      end
+
+      it 'sets output_audio to non-nil value' do
+        expect(request.output_audio.attached?).to be_falsey
+        request.save
+        expect(request.output_audio.attached?).to be_truthy
+      end
+    end
+
+    context 'when the image is not readable' do
+      let!(:image) { image_for_upload('nonsense.png', 'png') }
+
+      it 'updates intermediate_text field to an empty text' do
+        expect(request.intermediate_text).to be_nil
+        request.save
+        trimmed_expected_text = ' '.delete("\n").delete("\f")
+        trimmed_intermediate_text =
+          request.intermediate_text.delete("\n").delete("\f")
+
+        expect(trimmed_intermediate_text).to eq(trimmed_expected_text)
+      end
+
+      it 'still sets output_audio to non-nil value' do
+        expect(request.output_audio.attached?).to be_falsey
+        request.save
+        expect(request.output_audio.attached?).to be_truthy
+      end
+    end
   end
 end
