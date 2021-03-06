@@ -56,9 +56,10 @@ jobs:
       run: |
         yarn install --pure-lockfile
 
-    - name: Install Tesseract
+    - name: Install Tesseract, ESpeak, FFMpeg
       run: |
         sudo apt install tesseract-ocr
+        sudo apt-get -y install espeak ffmpeg
 
     - name: Setup test database
       env:
