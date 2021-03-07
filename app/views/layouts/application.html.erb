@@ -22,19 +22,7 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <div class="ui stackable menu">
-    <div class="header item">
-      <%= image_tag "book-glasses.png", width: '30px', height: '30px' %>
-    </div>
-    <div class="item">
-      Read to Me
-    </div>
-    <a class="item">
-      Upload an Image
-    </a>
-    <a class="item">
-      My Saved Audio
-  </div>
+  <%= render 'layouts/navbar' %>
 
   <body>
     <div class="ui center aligned basic segment">
